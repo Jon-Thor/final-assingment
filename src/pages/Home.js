@@ -4,6 +4,7 @@ import App from "../App";
 import Header from "../components/Header";
 import { Link } from "react-router-dom";
 import { enteredEmail } from "./OrderScreen";
+import Carousel from "react-carousel-minimal/dist/components/Carousel";
 
 const Home = () => {
   const [email, setEmail] = useState("");
@@ -27,13 +28,46 @@ const Home = () => {
     }
   };
 
+  const data = [
+    {
+      image:
+        "https://www.themealdb.com/images/media/meals/ssrrrs1503664277.jpg",
+      caption: "Beef Sunday Roast",
+    },
+    {
+      image: "https://www.themealdb.com/images/media/meals/1550441275.jpg",
+      caption: "Smoked Haddock Kedgeree",
+    },
+    {
+      image:
+        "https://www.themealdb.com/images/media/meals/xqrwyr1511133646.jpg",
+      caption: "Salted Caramel Cheescake",
+    },
+  ];
+
+  const captionStyle = {
+    fontSize: "1em",
+    fontWeight: "bold",
+  };
+
   return (
     <Wrapper>
       <Header />
       <div style={{ display: "flex" }}>
-        <Box>{email}</Box>
+        <Box>
+          <Carousel
+            data={data}
+            captionStyle={captionStyle}
+            time={2000}
+            automatic={true}
+            dots={true}
+            width="694px"
+            height="344px"
+            slideImageFit="cover"
+          />
+        </Box>
         <Smallerbox>
-          Order Flow Box
+          <h3>Click the Button here to Order</h3>
           <Link to="/Dish">
             <OrderButton>Order</OrderButton>
           </Link>
@@ -58,7 +92,18 @@ const Home = () => {
             Check Email
           </EmailButton>
         </Bottomboxes>
-        <Bottomboxes></Bottomboxes>
+        <EndOfHistoryCotainer
+          style={{
+            backgroundImage: `url(https://images.punkapi.com/v2/24.png)`,
+          }}
+        >
+          <EndOfHistory>
+            The End of History: The name derives from the famous work of
+            philosopher Francis Fukuyama, this is to beer what democracy is to
+            history. Complexity defined. Floral, grapefruit, caramel and cloves
+            are intensified by boozy heat.
+          </EndOfHistory>
+        </EndOfHistoryCotainer>
       </div>
     </Wrapper>
   );
@@ -78,13 +123,23 @@ const Wrapper = styled.div`
   color: black;
 `;
 
+const EndOfHistory = styled.p`
+  background-color: rgba(0, 0, 0, 0.5);
+  justify-self: end;
+  align-self: end;
+  font-size: 20px;
+  color: #fff;
+  padding: 10px;
+  margin: 0px;
+`;
+
 const Box = styled.div`
   box-sizing: border-box;
-  padding: 25px;
+  padding: 0px;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
-  align-items: center;
+
   margin: 10px;
   border: 3px solid black;
   height: 350px;
@@ -92,13 +147,23 @@ const Box = styled.div`
 `;
 
 const Smallerbox = styled(Box)`
+  padding: 25px;
+  align-items: center;
   justify-content: space-between;
   width: 290px;
 `;
 const Bottomboxes = styled(Box)`
+  padding: 25px;
   padding-top: 0px;
+  background-size: contain;
+  background-position: center;
   justify-content: space-between;
   width: 495px;
+`;
+
+const EndOfHistoryCotainer = styled(Bottomboxes)`
+  justify-content: end;
+  padding: 0px;
 `;
 
 const OrderButton = styled.button`

@@ -8,7 +8,7 @@ import { DishOrderList } from "./Dish";
 import { dishTotalCost, people, tempEmail } from "./OrderScreen";
 
 function Receipt() {
-  console.log(DishOrderList);
+  console.log(tempEmail);
 
   let totalCost =
     drinkOrderList.reduce((a, b) => {
@@ -24,10 +24,10 @@ function Receipt() {
       <Box>
         <h2>Receipt</h2>
         <OrderContainer>
-          <Orders>{DishOrderList.strMeal}</Orders>
           <Orders>
-            {DishOrderList.dishCost}*{people}=({dishTotalCost})kr
+            {DishOrderList.strMeal}*{people}
           </Orders>
+          <Orders>{dishTotalCost}kr</Orders>
         </OrderContainer>
         {drinkOrderList.map((item) => (
           <OrderContainer key={item.id}>
