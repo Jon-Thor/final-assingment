@@ -1,7 +1,16 @@
 import styled, { css } from "styled-components";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const Header = () => {
+  const location = useLocation();
+  let pathName = location.pathname;
+
+  const styles = {
+    [pathName]: {
+      color: "red",
+    },
+  };
+
   return (
     <div style={{ display: "flex", alignItems: "center" }}>
       <Link to="/">
@@ -9,19 +18,19 @@ const Header = () => {
       </Link>
 
       <Link to="/Dish">
-        <TopMenuItem>Dish</TopMenuItem>
+        <TopMenuItem style={styles["/Dish"]}>Dish</TopMenuItem>
       </Link>
 
       <Link to="/Drinks">
-        <TopMenuItem>Drinks</TopMenuItem>
+        <TopMenuItem style={styles["/Drinks"]}>Drinks</TopMenuItem>
       </Link>
 
       <Link to="/Order">
-        <TopMenuItem>Order</TopMenuItem>
+        <TopMenuItem style={styles["/Order"]}>Order</TopMenuItem>
       </Link>
 
       <Link to="/Receipt">
-        <TopMenuItem>Receipt</TopMenuItem>
+        <TopMenuItem style={styles["/Receipt"]}>Receipt</TopMenuItem>
       </Link>
     </div>
   );
@@ -34,7 +43,7 @@ const TopMenuItem = styled.header`
   margin: 30px;
   margin-bottom: 40px;
   margin-top: 80px;
-  color: red;
+  color: black;
   font-weight: bold;
   font-size: 40px;
 `;

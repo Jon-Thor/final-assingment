@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { useState, useRef, useEffect } from "react";
 import App from "../App";
 import Header from "../components/Header";
+import { pathName } from "../components/Header";
 import { Link } from "react-router-dom";
 import { enteredEmail } from "./OrderScreen";
 import Carousel from "react-carousel-minimal/dist/components/Carousel";
@@ -21,6 +22,7 @@ const Home = () => {
     for (let i = 0; i < enteredEmail.length; i++) {
       if (email in enteredEmail[i]) {
         let value = enteredEmail[i];
+        console.log(value);
         savedEmail = value[email];
         console.log(savedEmail);
       } else {

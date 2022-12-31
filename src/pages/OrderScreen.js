@@ -1,10 +1,11 @@
 import styled from "styled-components";
 import { useState, useRef, useEffect } from "react";
-import App from "../App";
+import "../App.css";
 import Header from "../components/Header";
 import { Link } from "react-router-dom";
 import { drinkOrderList } from "./Drinks";
 import { dishName, dishCost, DishOrderList } from "./Dish";
+import DateTimePicker from "react-datetime-picker";
 
 function Order() {
   const [count, setCount] = useState(1);
@@ -13,7 +14,18 @@ function Order() {
 
   const [submitMessage, setsubmitMessage] = useState("Submit Email");
 
-  console.log(submitMessage);
+  const [value, onChange] = useState(new Date());
+
+  var options = {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "numeric",
+    minute: "numeric",
+  };
+
+  const currentDate = new Date();
 
   const handleClick = (i) => {
     if (count + i >= 11 || count + i <= 0) {
@@ -41,16 +53,34 @@ function Order() {
 
   const addDish = () => {
     dishTotalCost = DishOrderList.dishCost * count;
+    console.log(value.toLocaleDateString("en-US", options));
+    sendDate = value.toLocaleDateString("en-GB", options).toString();
     people = count;
     console.log(dishTotalCost);
   };
+
+  console.log(currentDate);
+  console.log(value);
 
   return (
     <Wrapper>
       <Header />
       <Box>
-        <div style={{ border: "1px solid black", height: "100%" }}>
-          <p>{email}</p>
+        <div
+          style={{
+            border: "1px solid black",
+            height: "100%",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          <p>Select a date and time here</p>
+          <DateTimePicker
+            onChange={onChange}
+            value={value}
+            minDate={currentDate}
+          />
         </div>
 
         <div
@@ -108,7 +138,13 @@ function Order() {
           </div>
 
           <label>{submitMessage}</label>
-          <div style={{ display: "flex" }}>
+          <div
+            style={{
+              display: "flex",
+              width: "100%",
+              justifyContent: "space-between",
+            }}
+          >
             <input
               onChange={handleChange}
               type={"email"}
@@ -134,9 +170,11 @@ export let enteredEmail = JSON.parse(localStorage.getItem("Emails") || "[]");
 
 export let dishTotalCost;
 
-export let tempEmail;
+export let tempEmail = "";
 
 export let people;
+
+export let sendDate;
 
 const ClickButton = styled.button`
   background-color: transparent;
@@ -171,7 +209,7 @@ const Box = styled.div`
   margin: 10px;
   border: 3px solid black;
   height: 600px;
-  width: 1000px;
+  width: 1200px;
 `;
 
 const OrderLink = styled(Link)`
@@ -189,4 +227,5 @@ const OrderButton = styled.button`
   height: 75px;
   width: 225px;
   justify-self: end;
+  margin 10px
 `;

@@ -5,7 +5,7 @@ import Header from "../components/Header";
 import { Link } from "react-router-dom";
 import { drinkOrderList } from "./Drinks";
 import { DishOrderList } from "./Dish";
-import { dishTotalCost, people, tempEmail } from "./OrderScreen";
+import { dishTotalCost, people, tempEmail, sendDate } from "./OrderScreen";
 
 function Receipt() {
   console.log(tempEmail);
@@ -35,11 +35,14 @@ function Receipt() {
             <Orders>{item.ordercost}kr</Orders>
           </OrderContainer>
         ))}
-        <p>{tempEmail}</p>
-        <p>
-          Total Cost:
-          {totalCost}
-        </p>
+        <div>
+          <p>{sendDate}</p>
+          <p>{tempEmail}</p>
+          <h3>
+            Total Cost:
+            {totalCost}
+          </h3>
+        </div>
       </Box>
     </Wrapper>
   );
