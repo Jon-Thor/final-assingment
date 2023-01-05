@@ -2,10 +2,11 @@ import styled from "styled-components";
 import { useState, useRef, useEffect } from "react";
 import "../App.css";
 import Header from "../components/Header";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { drinkOrderList } from "./Drinks";
 import { dishName, dishCost, DishOrderList } from "./Dish";
 import DateTimePicker from "react-datetime-picker";
+import { emailValue, savedEmail } from "./Home";
 
 function Order() {
   const [count, setCount] = useState(1);
@@ -16,7 +17,29 @@ function Order() {
 
   const [value, onChange] = useState(new Date());
 
-  var options = {
+  const [orderText, setOrderText] = useState("Order");
+
+  let history = useHistory();
+
+  useEffect(() => {
+    /*if (Object.values(emailValue).length != 0) {
+      for (let i = 0; i < enteredEmail.length; i++) {
+        if (emailValue === enteredEmail[i]) {
+          enteredEmail[i] = emailValue[savedEmail];
+          console.log(enteredEmail[i]);
+          tempEmail = "emailValue";
+          setsubmitMessage("Email Updated");
+          localStorage.setItem("Emails", JSON.stringify(enteredEmail));
+          setOrderText("Update Order");
+
+          return;
+        }
+      }
+    }*/
+    tempEmail = "";
+  }, []);
+
+  const options = {
     weekday: "long",
     year: "numeric",
     month: "long",
@@ -25,7 +48,12 @@ function Order() {
     minute: "numeric",
   };
 
-  const currentDate = new Date();
+  /*console.log(
+    value.getHours() >= 16 &&
+      value.getHours() < 21 &&
+      value.getDay() != 6 &&
+      value.getDay() != 0
+  );*/
 
   const handleClick = (i) => {
     if (count + i >= 11 || count + i <= 0) {
@@ -34,33 +62,57 @@ function Order() {
     setCount(count + i);
   };
 
-  const handleChange = (event) => {
-    setEmail(event.target.value);
+  const checkTime = () => {
+    return (
+      value.getHours() >= 16 &&
+      value.getHours() < 23 &&
+      value.getDay() != 6 &&
+      value.getDay() != 0
+    );
   };
 
   const handleSubmit = () => {
     if (/\S+@\S+\.\S+/.test(email)) {
-      enteredEmail.push({ [email]: { drinkOrderList, DishOrderList } });
+      for (let i = 0; i < enteredEmail.length; i++) {
+        if (email in enteredEmail[i]) {
+          enteredEmail[i] = { [email]: { DishOrderList } };
+          tempEmail = email;
+          setsubmitMessage("Email Updated");
+          localStorage.setItem("Emails", JSON.stringify(enteredEmail));
+          console.log(enteredEmail);
+          return;
+        }
+      }
+      enteredEmail.push({ [email]: { DishOrderList } });
       tempEmail = email;
       console.log(enteredEmail);
       setsubmitMessage("Email Submitted");
       localStorage.setItem("Emails", JSON.stringify(enteredEmail));
-      console.log(JSON.parse(localStorage.getItem("Emails")));
+      console.log(JSON.parse(localStorage.getItem("/Emails")));
     } else {
       setsubmitMessage("Invalid Email");
     }
   };
 
   const addDish = () => {
-    dishTotalCost = DishOrderList.dishCost * count;
-    console.log(value.toLocaleDateString("en-US", options));
-    sendDate = value.toLocaleDateString("en-GB", options).toString();
-    people = count;
-    console.log(dishTotalCost);
+    if (tempEmail.length === 0) {
+      setsubmitMessage("Please Submit a Email");
+    }
+    if (!checkTime()) {
+      console.log("please choose betweeen Mon-fri 16:00 - 23:00");
+    }
+    if (checkTime() && tempEmail.length !== 0) {
+      dishTotalCost = DishOrderList.dishCost * count;
+      console.log(value.toLocaleDateString("en-gb", options));
+      sendDate = value.toLocaleDateString("en-gb", options).toString();
+      people = count;
+      console.log(dishTotalCost);
+      history.push("/Receipt");
+    }
   };
 
-  console.log(currentDate);
-  console.log(value);
+  /*console.log(currentDate);
+  console.log(enteredEmail);*/
 
   return (
     <Wrapper>
@@ -79,7 +131,10 @@ function Order() {
           <DateTimePicker
             onChange={onChange}
             value={value}
-            minDate={currentDate}
+            minDate={new Date()}
+            locale="en-gb"
+            clearIcon={null}
+            calendarIcon={null}
           />
         </div>
 
@@ -146,7 +201,7 @@ function Order() {
             }}
           >
             <input
-              onChange={handleChange}
+              onChange={(e) => setEmail(e.target.value)}
               type={"email"}
               style={{ fontSize: "35px", width: "450px" }}
             ></input>
@@ -155,9 +210,7 @@ function Order() {
               Submit Email
             </OrderButton>
           </div>
-          <OrderLink to="/Receipt" onClick={() => addDish()}>
-            <OrderButton>Order</OrderButton>
-          </OrderLink>
+          <OrderButton onClick={() => addDish()}>{orderText}</OrderButton>
         </div>
       </Box>
     </Wrapper>

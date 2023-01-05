@@ -21,9 +21,9 @@ const Home = () => {
   const handleClick = () => {
     for (let i = 0; i < enteredEmail.length; i++) {
       if (email in enteredEmail[i]) {
-        let value = enteredEmail[i];
-        console.log(value);
-        savedEmail = value[email];
+        emailValue = enteredEmail[i];
+        console.log(emailValue);
+        savedEmail = emailValue[email];
         console.log(savedEmail);
       } else {
       }
@@ -114,6 +114,8 @@ const Home = () => {
 export default Home;
 
 export let savedEmail = "";
+
+export let emailValue = "";
 
 const Wrapper = styled.div`
   align-items: center;

@@ -9,18 +9,9 @@ import { savedEmail } from "./Home";
 const Drinks = () => {
   let history = useHistory();
 
-  let drinkID = 0;
-
-  drinkOrderList = savedEmail["drinkOrderList"] || [];
-
-  if (Object.values(savedEmail).length != 0) {
-    drinkID =
-      savedEmail["drinkOrderList"][savedEmail["drinkOrderList"].length - 1][
-        "id"
-      ] + 1;
-  }
-
   const [drinks, setDrinks] = useState();
+
+  const [sold, setSold] = useState({});
 
   let drinkCost = 450;
 
@@ -35,13 +26,21 @@ const Drinks = () => {
 
   useEffect(() => {
     getDrinks();
+    drinkOrderList = [];
+    drinkID = 0;
   }, []);
 
-  const AddDrink = (drink, cost) => {
+  const AddDrink = (drink, cost, itemid) => {
     drinkOrderList.push({ drinkorder: drink, ordercost: cost, id: drinkID });
     console.log(drinkOrderList);
     console.log(cost);
     drinkID++;
+    if (sold[itemid] === undefined) {
+      setSold({
+        ...sold,
+        [itemid]: !sold[itemid],
+      });
+    }
   };
 
   const handleLinkClick = () => {
@@ -62,11 +61,25 @@ const Drinks = () => {
                 <Img
                   key={item.id}
                   style={{ backgroundImage: `url(${item.image_url})` }}
-                  onClick={() =>
-                    AddDrink(item.name, costList[item.id - 1], item.id)
-                  }
+                  onClick={() => {
+                    AddDrink(item.name, costList[item.id - 1], item.id);
+                  }}
                 >
                   <p>{costList[item.id - 1]}kr</p>
+                  {sold[item.id] && (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                      className="w-5 h-5"
+                    >
+                      <CheckMark
+                        fillRule="evenodd"
+                        d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  )}
                   <DrinkName>{item.name}</DrinkName>
                 </Img>
               ))
@@ -95,6 +108,8 @@ export default Drinks;
 
 export let drinkOrderList = [];
 
+export let drinkID = 0;
+
 const Wrapper = styled.div`
   align-items: center;
   background-color: white;
@@ -110,6 +125,10 @@ const DrinkName = styled.p`
   color: #fff;
   padding: 10px;
   margin: 0px;
+`;
+
+const CheckMark = styled.path`
+  color: green;
 `;
 
 const Img = styled.div`
