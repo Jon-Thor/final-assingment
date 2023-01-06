@@ -17,21 +17,13 @@ const Header = () => {
         <Logo src="http://ih1.redbubble.net/image.181146356.8650/sticker,375x360.u1.png" />
       </Link>
 
-      <Link to="/Dish">
-        <TopMenuItem style={styles["/Dish"]}>Dish</TopMenuItem>
-      </Link>
+      <TopMenuItem style={styles["/Dish"]}>Dish</TopMenuItem>
 
-      <Link to="/Drinks">
-        <TopMenuItem style={styles["/Drinks"]}>Drinks</TopMenuItem>
-      </Link>
+      <TopMenuItem style={styles["/Drinks"]}>Drinks</TopMenuItem>
 
-      <Link to="/Order">
-        <TopMenuItem style={styles["/Order"]}>Order</TopMenuItem>
-      </Link>
+      <TopMenuItem style={styles["/Order"]}>Order</TopMenuItem>
 
-      <Link to="/Receipt">
-        <TopMenuItem style={styles["/Receipt"]}>Receipt</TopMenuItem>
-      </Link>
+      <TopMenuItem style={styles["/Receipt"]}>Receipt</TopMenuItem>
     </div>
   );
 };

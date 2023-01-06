@@ -1,10 +1,7 @@
 import styled from "styled-components";
 import { useState, useRef, useEffect } from "react";
-import App from "../App";
 import Header from "../components/Header";
 import { Link, useHistory } from "react-router-dom";
-import Receipt from "./Receipt";
-import { savedEmail } from "./Home";
 
 const Drinks = () => {
   let history = useHistory();
@@ -89,7 +86,10 @@ const Drinks = () => {
           </Box>
         </div>
         <Smallerbox>
-          <p>A</p>
+          <p>
+            Click next to
+            <br /> proceed to Order
+          </p>
 
           <OrderButton
             onClick={() => {
@@ -155,6 +155,7 @@ const Box = styled.div`
 `;
 
 const Smallerbox = styled.div`
+  text-align: center;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;

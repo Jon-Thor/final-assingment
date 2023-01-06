@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import "../App.css";
 import Header from "../components/Header";
 import { Link, useHistory } from "react-router-dom";
@@ -18,16 +18,18 @@ function Order() {
   const [value, onChange] = useState(new Date());
 
   const [orderText, setOrderText] = useState("Order");
-
   let history = useHistory();
 
   useEffect(() => {
-    /*if (Object.values(emailValue).length != 0) {
+    if (Object.values(emailValue).length != 0) {
+      console.log(emailValue);
       for (let i = 0; i < enteredEmail.length; i++) {
         if (emailValue === enteredEmail[i]) {
-          enteredEmail[i] = emailValue[savedEmail];
-          console.log(enteredEmail[i]);
-          tempEmail = "emailValue";
+          savedEmail["DishOrderList"] = DishOrderList;
+          enteredEmail[i] = emailValue;
+          console.log(savedEmail);
+          tempEmail = savedEmail.email;
+          console.log(tempEmail);
           setsubmitMessage("Email Updated");
           localStorage.setItem("Emails", JSON.stringify(enteredEmail));
           setOrderText("Update Order");
@@ -35,7 +37,7 @@ function Order() {
           return;
         }
       }
-    }*/
+    }
     tempEmail = "";
   }, []);
 
@@ -47,13 +49,6 @@ function Order() {
     hour: "numeric",
     minute: "numeric",
   };
-
-  /*console.log(
-    value.getHours() >= 16 &&
-      value.getHours() < 21 &&
-      value.getDay() != 6 &&
-      value.getDay() != 0
-  );*/
 
   const handleClick = (i) => {
     if (count + i >= 11 || count + i <= 0) {
@@ -75,7 +70,7 @@ function Order() {
     if (/\S+@\S+\.\S+/.test(email)) {
       for (let i = 0; i < enteredEmail.length; i++) {
         if (email in enteredEmail[i]) {
-          enteredEmail[i] = { [email]: { DishOrderList } };
+          enteredEmail[i] = { [email]: { DishOrderList, email: email } };
           tempEmail = email;
           setsubmitMessage("Email Updated");
           localStorage.setItem("Emails", JSON.stringify(enteredEmail));
@@ -83,9 +78,8 @@ function Order() {
           return;
         }
       }
-      enteredEmail.push({ [email]: { DishOrderList } });
+      enteredEmail.push({ [email]: { DishOrderList, email: email } });
       tempEmail = email;
-      console.log(enteredEmail);
       setsubmitMessage("Email Submitted");
       localStorage.setItem("Emails", JSON.stringify(enteredEmail));
       console.log(JSON.parse(localStorage.getItem("/Emails")));
@@ -99,7 +93,7 @@ function Order() {
       setsubmitMessage("Please Submit a Email");
     }
     if (!checkTime()) {
-      console.log("please choose betweeen Mon-fri 16:00 - 23:00");
+      alert("please choose betweeen Mon-fri 16:00 - 23:00");
     }
     if (checkTime() && tempEmail.length !== 0) {
       dishTotalCost = DishOrderList.dishCost * count;
@@ -118,16 +112,10 @@ function Order() {
     <Wrapper>
       <Header />
       <Box>
-        <div
-          style={{
-            border: "1px solid black",
-            height: "100%",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
-          <p>Select a date and time here</p>
+        <CalendarContainer>
+          <p>
+            Select a date between <br /> Mon-fri 16:00-23:00 here
+          </p>
           <DateTimePicker
             onChange={onChange}
             value={value}
@@ -136,25 +124,10 @@ function Order() {
             clearIcon={null}
             calendarIcon={null}
           />
-        </div>
+        </CalendarContainer>
 
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            padding: "20px",
-            height: "100%",
-            justifyContent: "space-around",
-          }}
-        >
-          <div
-            style={{
-              width: "275px",
-              display: "flex",
-              flexDirection: "column",
-              paddingTop: "20px",
-            }}
-          >
+        <EmailOrderDiv>
+          <PeopleCountDiv>
             <p style={{ alignSelf: "center", marginBottom: "-20px" }}>
               How many people
             </p>
@@ -190,7 +163,7 @@ function Order() {
                 </ArrowButton>
               </ClickButton>
             </div>
-          </div>
+          </PeopleCountDiv>
 
           <label>{submitMessage}</label>
           <div
@@ -211,7 +184,7 @@ function Order() {
             </OrderButton>
           </div>
           <OrderButton onClick={() => addDish()}>{orderText}</OrderButton>
-        </div>
+        </EmailOrderDiv>
       </Box>
     </Wrapper>
   );
@@ -243,6 +216,30 @@ const ArrowButton = styled.svg`
   padding: 0px;
 `;
 
+const CalendarContainer = styled.div`
+  border: 1px solid black;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const EmailOrderDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  height: 100%;
+  justify-content: space-around;
+}}
+`;
+
+const PeopleCountDiv = styled.div`
+  width: 275px;
+  display: flex;
+  flex-direction: column;
+  padding-top: 20px;
+`;
+
 const Wrapper = styled.div`
   align-items: center;
   background-color: white;
@@ -263,11 +260,6 @@ const Box = styled.div`
   border: 3px solid black;
   height: 600px;
   width: 1200px;
-`;
-
-const OrderLink = styled(Link)`
-  align-self: flex-end;
-  justify-self: end;
 `;
 
 const OrderButton = styled.button`

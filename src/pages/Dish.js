@@ -32,6 +32,7 @@ const Dish = () => {
 
   useEffect(() => {
     if (Object.values(savedEmail).length != 0) {
+      console.log(savedEmail["DishOrderList"]);
       setDish(savedEmail["DishOrderList"]);
     } else {
       getRandomDish();
@@ -59,14 +60,17 @@ const Dish = () => {
         </div>
         <div style={{ display: "flex", flexDirection: "column" }}>
           <Smallerbox>
-            <p>A</p>
+            <p>
+              Click next to
+              <br /> proceed to Drinks
+            </p>
             <Link to="/Drinks">
               <OrderButton
                 onClick={() =>
                   addDish(dish.strMeal, dish.strMealThumb, dish.strInstructions)
                 }
               >
-                Order
+                Next
               </OrderButton>
             </Link>
           </Smallerbox>
@@ -145,6 +149,7 @@ const Box = styled.div`
 `;
 
 const Smallerbox = styled(Box)`
+  text-align: center;
   justify-content: space-around;
   width: 290px;
   height: 300px;

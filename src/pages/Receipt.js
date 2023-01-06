@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import { useState, useRef, useEffect } from "react";
-import App from "../App";
 import Header from "../components/Header";
 import { Link } from "react-router-dom";
 import { drinkOrderList } from "./Drinks";
@@ -36,8 +35,8 @@ function Receipt() {
           </OrderContainer>
         ))}
         <div>
-          <p>{sendDate}</p>
-          <p>{tempEmail}</p>
+          <h4>{sendDate}</h4>
+          <h4>{tempEmail}</h4>
           <h3>
             Total Cost:
             {totalCost}

@@ -10,7 +10,12 @@ import Carousel from "react-carousel-minimal/dist/components/Carousel";
 const Home = () => {
   const [email, setEmail] = useState("");
 
-  savedEmail = "";
+  const [enterEmailtext, setEnterEmail] = useState("Enter email");
+
+  useEffect(() => {
+    savedEmail = "";
+    emailValue = "";
+  }, []);
 
   console.log(enteredEmail);
 
@@ -24,6 +29,7 @@ const Home = () => {
         emailValue = enteredEmail[i];
         console.log(emailValue);
         savedEmail = emailValue[email];
+        setEnterEmail("Email found");
         console.log(savedEmail);
       } else {
       }
@@ -79,7 +85,7 @@ const Home = () => {
         <Bottomboxes>
           <p style={{ alignSelf: "start" }}>Find your order</p>
 
-          <label style={{ alignSelf: "start" }}>Enter email</label>
+          <label style={{ alignSelf: "start" }}>{enterEmailtext}</label>
           <input
             onChange={handleChange}
             type={"email"}
