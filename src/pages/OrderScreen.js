@@ -121,9 +121,6 @@ function Order() {
     }
   };
 
-  /*console.log(currentDate);
-  console.log(enteredEmail);*/
-
   return (
     <Wrapper>
       <Header />
