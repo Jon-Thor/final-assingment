@@ -2,13 +2,20 @@ import styled from "styled-components";
 import { useState, useEffect } from "react";
 import "../App.css";
 import Header from "../components/Header";
-import { Link, useHistory } from "react-router-dom";
-import { drinkOrderList } from "./Drinks";
-import { dishName, dishCost, DishOrderList } from "./Dish";
+import { Link, useHistory, useLocation } from "react-router-dom";
 import DateTimePicker from "react-datetime-picker";
-import { emailValue, savedEmail } from "./Home";
+
+let dishTotalCost;
+
+let tempEmail = "";
+
+let enteredEmail = JSON.parse(localStorage.getItem("Emails") || "[]");
 
 function Order() {
+  const history = useHistory();
+  const location = useLocation();
+
+  var dishOrderList = location.dishOrderList;
   const [count, setCount] = useState(1);
 
   const [email, setEmail] = useState("");
@@ -18,18 +25,18 @@ function Order() {
   const [value, onChange] = useState(new Date());
 
   const [orderText, setOrderText] = useState("Order");
-  let history = useHistory();
 
   useEffect(() => {
-    if (Object.values(emailValue).length != 0) {
-      console.log(emailValue);
+    if (location.savedEmail.length != 0) {
       for (let i = 0; i < enteredEmail.length; i++) {
-        if (emailValue === enteredEmail[i]) {
-          savedEmail["DishOrderList"] = DishOrderList;
-          enteredEmail[i] = emailValue;
-          console.log(savedEmail);
-          tempEmail = savedEmail.email;
-          console.log(tempEmail);
+        if (
+          location.savedEmail.email ===
+          enteredEmail[0][`${location.savedEmail.email}`].email
+        ) {
+          location.savedEmail["dishOrderList"] = location.dishOrderList;
+          enteredEmail[i] = location.emailValue;
+          console.log(location.savedEmail);
+          tempEmail = location.savedEmail.email;
           setsubmitMessage("Email Updated");
           localStorage.setItem("Emails", JSON.stringify(enteredEmail));
           setOrderText("Update Order");
@@ -70,7 +77,7 @@ function Order() {
     if (/\S+@\S+\.\S+/.test(email)) {
       for (let i = 0; i < enteredEmail.length; i++) {
         if (email in enteredEmail[i]) {
-          enteredEmail[i] = { [email]: { DishOrderList, email: email } };
+          enteredEmail[i] = { [email]: { dishOrderList, email: email } };
           tempEmail = email;
           setsubmitMessage("Email Updated");
           localStorage.setItem("Emails", JSON.stringify(enteredEmail));
@@ -78,8 +85,8 @@ function Order() {
           return;
         }
       }
-      enteredEmail.push({ [email]: { DishOrderList, email: email } });
       tempEmail = email;
+      enteredEmail.push({ [email]: { dishOrderList, email: email } });
       setsubmitMessage("Email Submitted");
       localStorage.setItem("Emails", JSON.stringify(enteredEmail));
       console.log(JSON.parse(localStorage.getItem("/Emails")));
@@ -96,12 +103,21 @@ function Order() {
       alert("please choose betweeen Mon-fri 16:00 - 23:00");
     }
     if (checkTime() && tempEmail.length !== 0) {
-      dishTotalCost = DishOrderList.dishCost * count;
+      dishTotalCost = location.dishOrderList.dishCost * count;
       console.log(value.toLocaleDateString("en-gb", options));
-      sendDate = value.toLocaleDateString("en-gb", options).toString();
-      people = count;
+      let sendDate = value.toLocaleDateString("en-gb", options).toString();
       console.log(dishTotalCost);
-      history.push("/Receipt");
+      history.push({
+        pathname: "/Receipt",
+        emailValue: location.emailValue,
+        savedEmail: location.savedEmail,
+        dishOrderList: location.dishOrderList,
+        drinks: location.drinks,
+        dishTotalCost: dishTotalCost,
+        count: count,
+        timeAndDate: sendDate,
+        email: tempEmail,
+      });
     }
   };
 
@@ -191,16 +207,6 @@ function Order() {
 }
 
 export default Order;
-
-export let enteredEmail = JSON.parse(localStorage.getItem("Emails") || "[]");
-
-export let dishTotalCost;
-
-export let tempEmail = "";
-
-export let people;
-
-export let sendDate;
 
 const ClickButton = styled.button`
   background-color: transparent;

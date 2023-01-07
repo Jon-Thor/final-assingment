@@ -2,22 +2,25 @@ import styled from "styled-components";
 import { useState, useRef, useEffect } from "react";
 import App from "../App";
 import Header from "../components/Header";
-import { pathName } from "../components/Header";
-import { Link } from "react-router-dom";
-import { enteredEmail } from "./OrderScreen";
+import { Link, useHistory } from "react-router-dom";
 import Carousel from "react-carousel-minimal/dist/components/Carousel";
 
+let enteredEmail = JSON.parse(localStorage.getItem("Emails") || "[]");
+
+let savedEmail = "";
+let emailValue = "";
+
 const Home = () => {
+  const history = useHistory();
+
   const [email, setEmail] = useState("");
 
-  const [enterEmailtext, setEnterEmail] = useState("Enter email");
+  console.log(enteredEmail);
 
   useEffect(() => {
     savedEmail = "";
     emailValue = "";
   }, []);
-
-  console.log(enteredEmail);
 
   const handleChange = (event) => {
     setEmail(event.target.value);
@@ -27,10 +30,13 @@ const Home = () => {
     for (let i = 0; i < enteredEmail.length; i++) {
       if (email in enteredEmail[i]) {
         emailValue = enteredEmail[i];
-        console.log(emailValue);
         savedEmail = emailValue[email];
-        setEnterEmail("Email found");
         console.log(savedEmail);
+        history.push({
+          pathname: "/Dish",
+          emailValue: emailValue,
+          savedEmail: savedEmail,
+        });
       } else {
       }
     }
@@ -58,6 +64,14 @@ const Home = () => {
     fontWeight: "bold",
   };
 
+  const linkButton = () => {
+    history.push({
+      pathname: "/Dish",
+      emailValue: emailValue,
+      savedEmail: savedEmail,
+    });
+  };
+
   return (
     <Wrapper>
       <Header />
@@ -76,16 +90,15 @@ const Home = () => {
         </Box>
         <Smallerbox>
           <h3>Click the Button here to Order</h3>
-          <Link to="/Dish">
-            <OrderButton>Order</OrderButton>
-          </Link>
+
+          <OrderButton onClick={() => linkButton()}>Order</OrderButton>
         </Smallerbox>
       </div>
       <div style={{ display: "flex" }}>
         <Bottomboxes>
           <p style={{ alignSelf: "start" }}>Find your order</p>
 
-          <label style={{ alignSelf: "start" }}>{enterEmailtext}</label>
+          <label style={{ alignSelf: "start" }}>Enter email</label>
           <input
             onChange={handleChange}
             type={"email"}
@@ -118,10 +131,6 @@ const Home = () => {
 };
 
 export default Home;
-
-export let savedEmail = "";
-
-export let emailValue = "";
 
 const Wrapper = styled.div`
   align-items: center;

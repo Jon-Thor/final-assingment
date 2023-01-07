@@ -3,7 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 
 const Header = () => {
   const location = useLocation();
-  let pathName = location.pathname;
+  const pathName = location.pathname;
 
   const styles = {
     [pathName]: {

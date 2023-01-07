@@ -1,26 +1,31 @@
 import styled from "styled-components";
-import { useState, useRef, useEffect } from "react";
-import App from "../App";
+import { useState, useEffect } from "react";
 import Header from "../components/Header";
-import { Link } from "react-router-dom";
-import { savedEmail } from "./Home";
+import { useHistory, useLocation } from "react-router-dom";
 
 const Dish = () => {
+  const history = useHistory();
+  const location = useLocation();
+
   const [dish, setDish] = useState();
 
   let cost = 2200;
 
-  if (Object.values(savedEmail).length != 0) {
-    console.log(savedEmail);
+  if (location.savedEmail.length != 0) {
+    console.log(location.savedEmail);
   }
   const addDish = (orderDish, dishImg, dishInstruct) => {
-    DishOrderList = {
-      strMeal: orderDish,
-      dishCost: cost,
-      strMealThumb: dishImg,
-      strInstructions: dishInstruct,
-    };
-    console.log(DishOrderList);
+    history.push({
+      pathname: "/Drinks",
+      emailValue: location.emailValue,
+      savedEmail: location.savedEmail,
+      dishOrderList: {
+        strMeal: orderDish,
+        dishCost: cost,
+        strMealThumb: dishImg,
+        strInstructions: dishInstruct,
+      },
+    });
   };
 
   const getRandomDish = async () => {
@@ -31,9 +36,9 @@ const Dish = () => {
   };
 
   useEffect(() => {
-    if (Object.values(savedEmail).length != 0) {
-      console.log(savedEmail["DishOrderList"]);
-      setDish(savedEmail["DishOrderList"]);
+    if (location.savedEmail.length !== 0) {
+      console.log(location.savedEmail["dishOrderList"]);
+      setDish(location.savedEmail["dishOrderList"]);
     } else {
       getRandomDish();
     }
@@ -64,15 +69,14 @@ const Dish = () => {
               Click next to
               <br /> proceed to Drinks
             </p>
-            <Link to="/Drinks">
-              <OrderButton
-                onClick={() =>
-                  addDish(dish.strMeal, dish.strMealThumb, dish.strInstructions)
-                }
-              >
-                Next
-              </OrderButton>
-            </Link>
+
+            <OrderButton
+              onClick={() =>
+                addDish(dish.strMeal, dish.strMealThumb, dish.strInstructions)
+              }
+            >
+              Next
+            </OrderButton>
           </Smallerbox>
           <GenerateNew onClick={() => getRandomDish()}>
             Get new dish
@@ -84,12 +88,6 @@ const Dish = () => {
 };
 
 export default Dish;
-
-export let DishOrderList = {};
-
-export let dishName;
-
-export let dishCost;
 
 const OrderAndCost = styled.div`
   box-sizing: border-box;

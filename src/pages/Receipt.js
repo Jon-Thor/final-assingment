@@ -1,18 +1,16 @@
 import styled from "styled-components";
 import { useState, useRef, useEffect } from "react";
 import Header from "../components/Header";
-import { Link } from "react-router-dom";
-import { drinkOrderList } from "./Drinks";
-import { DishOrderList } from "./Dish";
-import { dishTotalCost, people, tempEmail, sendDate } from "./OrderScreen";
+import { Link, useLocation } from "react-router-dom";
 
 function Receipt() {
-  console.log(tempEmail);
+  const location = useLocation();
+  console.log(location.dishTotalCost);
 
   let totalCost =
-    drinkOrderList.reduce((a, b) => {
+    location.drinks.reduce((a, b) => {
       return a + b.ordercost;
-    }, 0) + dishTotalCost;
+    }, 0) + location.dishTotalCost;
 
   return (
     <Wrapper>
@@ -24,23 +22,20 @@ function Receipt() {
         <h2>Receipt</h2>
         <OrderContainer>
           <Orders>
-            {DishOrderList.strMeal}*{people}
+            {location.dishOrderList.strMeal}*{location.count}{" "}
+            {location.dishTotalCost}kr
           </Orders>
-          <Orders>{dishTotalCost}kr</Orders>
         </OrderContainer>
-        {drinkOrderList.map((item) => (
+        {location.drinks.map((item) => (
           <OrderContainer key={item.id}>
             <Orders>{item.drinkorder}</Orders>
             <Orders>{item.ordercost}kr</Orders>
           </OrderContainer>
         ))}
         <div>
-          <h4>{sendDate}</h4>
-          <h4>{tempEmail}</h4>
-          <h3>
-            Total Cost:
-            {totalCost}
-          </h3>
+          <h4>{location.timeAndDate}</h4>
+          <h4>{location.email}</h4>
+          <h3>Total Cost: {totalCost}</h3>
         </div>
       </Box>
     </Wrapper>

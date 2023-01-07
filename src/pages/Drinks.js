@@ -1,10 +1,17 @@
 import styled from "styled-components";
 import { useState, useRef, useEffect } from "react";
 import Header from "../components/Header";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useHistory, useLocation } from "react-router-dom";
+
+let drinkOrderList = [];
+
+let drinkID = 0;
 
 const Drinks = () => {
-  let history = useHistory();
+  const location = useLocation();
+  const history = useHistory();
+
+  console.log(location.dishOrderList);
 
   const [drinks, setDrinks] = useState();
 
@@ -22,9 +29,8 @@ const Drinks = () => {
   };
 
   useEffect(() => {
-    getDrinks();
     drinkOrderList = [];
-    drinkID = 0;
+    getDrinks();
   }, []);
 
   const AddDrink = (drink, cost, itemid) => {
@@ -44,7 +50,13 @@ const Drinks = () => {
     if (drinkOrderList.length === 0) {
       return;
     }
-    history.push("/Order");
+    history.push({
+      pathname: "/Order",
+      emailValue: location.emailValue,
+      savedEmail: location.savedEmail,
+      dishOrderList: location.dishOrderList,
+      drinks: drinkOrderList,
+    });
   };
 
   return (
@@ -105,10 +117,6 @@ const Drinks = () => {
 };
 
 export default Drinks;
-
-export let drinkOrderList = [];
-
-export let drinkID = 0;
 
 const Wrapper = styled.div`
   align-items: center;
