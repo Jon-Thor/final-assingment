@@ -276,7 +276,8 @@ const OrderButton = styled.button`
   height: 75px;
   width: 225px;
   justify-self: end;
-  margin 10px &:hover {
+  margin 10px;
+  &:hover {
     background-color: #a74e3e;
   }
   &:active {
