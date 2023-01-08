@@ -130,13 +130,6 @@ const Wrapper = styled.div`
   color: black;
 `;
 
-const DrinkName = styled.p`
-  background-color: rgba(0, 0, 0, 0.5);
-  color: #fff;
-  padding: 10px;
-  margin: 0px;
-`;
-
 const FadeIn = keyframes`
 0% {opacity: 0;}
 10% {opacity: 0.1;}
@@ -150,6 +143,14 @@ const CheckMark = styled.path`
   color: green;
   animation-name: ${FadeIn};
   animation-duration: 0.5s;
+`;
+
+const DrinkName = styled.p`
+  font-size: 22px;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  padding: 10px;
+  margin: 0px;
 `;
 
 const Img = styled.div`
