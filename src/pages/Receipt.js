@@ -1,11 +1,15 @@
 import styled from "styled-components";
 import { useState, useRef, useEffect } from "react";
 import Header from "../components/Header";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useHistory } from "react-router-dom";
 
 function Receipt() {
+  const history = useHistory();
   const location = useLocation();
-  console.log(location.dishTotalCost);
+
+  if (location.savedEmail == undefined) {
+    history.push("/");
+  }
 
   let totalCost =
     location.drinks.reduce((a, b) => {
@@ -35,7 +39,7 @@ function Receipt() {
         <div>
           <h4>{location.timeAndDate}</h4>
           <h4>{location.email}</h4>
-          <h3>Total Cost: {totalCost}</h3>
+          <h3>Total Cost: {totalCost}kr</h3>
         </div>
       </Box>
     </Wrapper>
@@ -87,4 +91,10 @@ const OrderButton = styled.button`
   border-radius: 20px;
   height: 75px;
   width: 225px;
+  &:hover {
+    background-color: #a74e3e;
+  }
+  &:active {
+    background-color: #c16757;
+  }
 `;

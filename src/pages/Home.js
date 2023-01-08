@@ -18,6 +18,7 @@ const Home = () => {
   console.log(enteredEmail);
 
   useEffect(() => {
+    enteredEmail = JSON.parse(localStorage.getItem("Emails") || "[]");
     savedEmail = "";
     emailValue = "";
   }, []);
@@ -28,10 +29,10 @@ const Home = () => {
 
   const handleClick = () => {
     for (let i = 0; i < enteredEmail.length; i++) {
-      if (email in enteredEmail[i]) {
+      if (email === enteredEmail[i].email) {
         emailValue = enteredEmail[i];
         savedEmail = emailValue[email];
-        console.log(savedEmail);
+        console.log(emailValue.email);
         history.push({
           pathname: "/Dish",
           emailValue: emailValue,
@@ -193,6 +194,12 @@ const OrderButton = styled.button`
   border-radius: 20px;
   height: 75px;
   width: 225px;
+  &:hover {
+    background-color: #a74e3e;
+  }
+  &:active {
+    background-color: #c16757;
+  }
 `;
 const EmailButton = styled(OrderButton)`
   align-self: end;

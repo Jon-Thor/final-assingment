@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { useState, useRef, useEffect } from "react";
 import Header from "../components/Header";
 import { Link, useHistory, useLocation } from "react-router-dom";
@@ -10,8 +10,6 @@ let drinkID = 0;
 const Drinks = () => {
   const location = useLocation();
   const history = useHistory();
-
-  console.log(location.dishOrderList);
 
   const [drinks, setDrinks] = useState();
 
@@ -29,8 +27,12 @@ const Drinks = () => {
   };
 
   useEffect(() => {
-    drinkOrderList = [];
-    getDrinks();
+    if (location.dishOrderList == undefined) {
+      history.push("/");
+    } else {
+      drinkOrderList = [];
+      getDrinks();
+    }
   }, []);
 
   const AddDrink = (drink, cost, itemid) => {
@@ -48,7 +50,7 @@ const Drinks = () => {
 
   const handleLinkClick = () => {
     if (drinkOrderList.length === 0) {
-      return;
+      return alert("Please select a minimum of 1 drink");
     }
     history.push({
       pathname: "/Order",
@@ -135,11 +137,23 @@ const DrinkName = styled.p`
   margin: 0px;
 `;
 
+const FadeIn = keyframes`
+0% {opacity: 0;}
+10% {opacity: 0.1;}
+30% {opacity: 0.3; }
+40% {opacity: 0.4; }
+50% {opacity: 0.6; }
+100% {opacity: 1; }
+`;
+
 const CheckMark = styled.path`
   color: green;
+  animation-name: ${FadeIn};
+  animation-duration: 0.5s;
 `;
 
 const Img = styled.div`
+  cursor: pointer;
   justify-content: space-between;
   display: flex;
   flex-direction: column;
@@ -185,4 +199,10 @@ const OrderButton = styled.button`
   padding: 20px;
   min-width: 225px;
   max-width: fit-content;
+  &:hover {
+    background-color: #a74e3e;
+  }
+  &:active {
+    background-color: #c16757;
+  }
 `;

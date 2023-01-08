@@ -27,25 +27,26 @@ function Order() {
   const [orderText, setOrderText] = useState("Order");
 
   useEffect(() => {
-    if (location.savedEmail.length != 0) {
-      for (let i = 0; i < enteredEmail.length; i++) {
-        if (
-          location.savedEmail.email ===
-          enteredEmail[0][`${location.savedEmail.email}`].email
-        ) {
-          location.savedEmail["dishOrderList"] = location.dishOrderList;
-          enteredEmail[i] = location.emailValue;
-          console.log(location.savedEmail);
-          tempEmail = location.savedEmail.email;
-          setsubmitMessage("Email Updated");
-          localStorage.setItem("Emails", JSON.stringify(enteredEmail));
-          setOrderText("Update Order");
+    if (location.savedEmail == undefined) {
+      history.push("/");
+    } else {
+      if (location.emailValue.length != 0) {
+        for (let i = 0; i < enteredEmail.length; i++) {
+          if (location.emailValue.email === enteredEmail[i].email) {
+            location.savedEmail["dishOrderList"] = location.dishOrderList;
+            enteredEmail[i] = location.emailValue;
+            console.log(location.savedEmail);
+            tempEmail = location.emailValue.email;
+            setsubmitMessage("Email Updated");
+            localStorage.setItem("Emails", JSON.stringify(enteredEmail));
+            setOrderText("Update Order");
 
-          return;
+            return;
+          }
         }
       }
+      tempEmail = "";
     }
-    tempEmail = "";
   }, []);
 
   const options = {
@@ -77,7 +78,7 @@ function Order() {
     if (/\S+@\S+\.\S+/.test(email)) {
       for (let i = 0; i < enteredEmail.length; i++) {
         if (email in enteredEmail[i]) {
-          enteredEmail[i] = { [email]: { dishOrderList, email: email } };
+          enteredEmail[i] = { [email]: { dishOrderList }, email: email };
           tempEmail = email;
           setsubmitMessage("Email Updated");
           localStorage.setItem("Emails", JSON.stringify(enteredEmail));
@@ -86,7 +87,7 @@ function Order() {
         }
       }
       tempEmail = email;
-      enteredEmail.push({ [email]: { dishOrderList, email: email } });
+      enteredEmail.push({ [email]: { dishOrderList }, email: email });
       setsubmitMessage("Email Submitted");
       localStorage.setItem("Emails", JSON.stringify(enteredEmail));
       console.log(JSON.parse(localStorage.getItem("/Emails")));
@@ -275,5 +276,10 @@ const OrderButton = styled.button`
   height: 75px;
   width: 225px;
   justify-self: end;
-  margin 10px
+  margin 10px &:hover {
+    background-color: #a74e3e;
+  }
+  &:active {
+    background-color: #c16757;
+  }
 `;

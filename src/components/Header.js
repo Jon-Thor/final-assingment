@@ -13,9 +13,7 @@ const Header = () => {
 
   return (
     <div style={{ display: "flex", alignItems: "center" }}>
-      <Link to="/">
-        <Logo src="http://ih1.redbubble.net/image.181146356.8650/sticker,375x360.u1.png" />
-      </Link>
+      <Logo src="http://ih1.redbubble.net/image.181146356.8650/sticker,375x360.u1.png" />
 
       <TopMenuItem style={styles["/Dish"]}>Dish</TopMenuItem>
 

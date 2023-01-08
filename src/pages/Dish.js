@@ -11,8 +11,8 @@ const Dish = () => {
 
   let cost = 2200;
 
-  if (location.savedEmail.length != 0) {
-    console.log(location.savedEmail);
+  if (location.savedEmail == undefined) {
+    console.log("not found");
   }
   const addDish = (orderDish, dishImg, dishInstruct) => {
     history.push({
@@ -36,11 +36,15 @@ const Dish = () => {
   };
 
   useEffect(() => {
-    if (location.savedEmail.length !== 0) {
-      console.log(location.savedEmail["dishOrderList"]);
-      setDish(location.savedEmail["dishOrderList"]);
+    if (location.savedEmail == undefined) {
+      history.push("/");
     } else {
-      getRandomDish();
+      if (location.savedEmail.length !== 0) {
+        console.log(location.savedEmail["dishOrderList"]);
+        setDish(location.savedEmail["dishOrderList"]);
+      } else {
+        getRandomDish();
+      }
     }
   }, []);
 
@@ -163,6 +167,12 @@ const OrderButton = styled.button`
   padding: 20px;
   min-width: 225px;
   max-width: fit-content;
+  &:hover {
+    background-color: #a74e3e;
+  }
+  &:active {
+    background-color: #c16757;
+  }
 `;
 
 const GenerateNew = styled(OrderButton)`
