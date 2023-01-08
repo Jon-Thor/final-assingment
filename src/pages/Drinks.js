@@ -165,6 +165,12 @@ const Img = styled.div`
   margin: 10px;
   width: 300px;
   height: 300px;
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+  &:active {
+    background-color: rgba(0, 0, 0, 0.2);
+  }
 `;
 
 const Box = styled.div`
